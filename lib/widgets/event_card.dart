@@ -31,7 +31,7 @@ class EventCard extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.zero,
-      // Supaya efek ripple InkWell mengikuti sudut kartu yang membulat.
+      // Supaya ripple InkWell mengikuti sudut kartu yang membulat.
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -40,17 +40,16 @@ class EventCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Thumbnail sederhana: kotak berwarna + ikon kategori.
               Container(
-                width: 88,
-                height: 88,
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   color: colors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   categoryIcon(event.category),
-                  size: 40,
+                  size: 36,
                   color: colors.primary,
                 ),
               ),
@@ -60,22 +59,20 @@ class EventCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Badge kategori emas.
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF6EEDC),
+                        color: colors.secondary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        event.category.toUpperCase(),
+                        event.category,
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF795902),
                         ),
                       ),
                     ),
@@ -92,7 +89,7 @@ class EventCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     _InfoRow(
                       icon: Icons.calendar_today_outlined,
-                      text: '${event.formattedDate} • ${event.time}',
+                      text: event.formattedDate,
                     ),
                     const SizedBox(height: 2),
                     _InfoRow(
@@ -100,31 +97,14 @@ class EventCard extends StatelessWidget {
                       text: event.location,
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          event.formattedPrice,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: event.isFree
-                                ? Colors.green.shade700
-                                : colors.primary,
-                          ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            'Sisa ${event.quota} kuota',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: event.quota <= 10
-                                  ? Colors.orange.shade800
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      event.formattedPrice,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: event.isFree
+                            ? Colors.green.shade700
+                            : colors.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -137,7 +117,6 @@ class EventCard extends StatelessWidget {
   }
 }
 
-/// Baris kecil: ikon + teks (tanggal, lokasi).
 class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String text;
