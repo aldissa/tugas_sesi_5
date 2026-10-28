@@ -7,6 +7,7 @@ import '../widgets/event_card.dart';
 import '../widgets/filter_bottom_sheet.dart';
 import '../widgets/venue_map_viewer.dart';
 import 'registered_tickets_screen.dart';
+import 'event_registration_screen.dart';
 
 /// Layar utama: menampung 3 tab (Seminar, Galeri & Denah, Tiket).
 class HomeEventsScreen extends StatefulWidget {
@@ -46,6 +47,19 @@ class _HomeEventsScreenState extends State<HomeEventsScreen> {
 
   void _cancelTicket(RegistrationTicket ticket) {
     setState(() => _tickets.remove(ticket));
+  }
+
+  Future<void> _openRegistration(EventItem event) async {
+    final ticket = await Navigator.push<RegistrationTicket>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventRegistrationScreen(event: event),
+      ),
+    );
+    // Jika pendaftaran berhasil, tiket ditambahkan ke daftar.
+    if (ticket != null) {
+      setState(() => _tickets.add(ticket));
+    }
   }
 
   @override
@@ -140,14 +154,9 @@ class _HomeEventsScreenState extends State<HomeEventsScreen> {
                     final event = events[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
-                      child: EventCard(
-                        event: event,
-                        onTap: () {
-                          // Sementara: formulir dibuat di Langkah 6.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Dipilih: ${event.title}')),
-                          );
-                        },
+                        child: EventCard(
+                          event: event,
+                          onTap: () => _openRegistration(event),
                       ),
                     );
                   },
